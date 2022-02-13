@@ -78,7 +78,7 @@ class _Requests extends State<Requests> {
                               arguments: [name, types, typesDetails, type]);
                         },
                         child: const Text(
-                          "Requests",
+                          "Matches",
                           style: TextStyle(color: Colors.grey),
                         ),
                         style: ElevatedButton.styleFrom(

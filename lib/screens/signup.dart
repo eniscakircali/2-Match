@@ -139,7 +139,7 @@ class _SignupState extends State<Signup> {
       // ignore: deprecated_member_use
       child: RaisedButton(
         child: const Text(
-          "Kayıt Ol",
+          "Register",
           style: TextStyle(color: Colors.white),
         ),
         color: Colors.blueGrey,

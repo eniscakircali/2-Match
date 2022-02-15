@@ -14,6 +14,6 @@ An application that matches users by their character types.
 
 <div style="text-align:center">
   <img src="https://github.com/MortuusestChe/MBTI-Match/blob/main/lib/assets/screenshots/6.jpg"width="200" height="400" />
-  
-<div style="text-align:center"><img src="https://github.com/MortuusestChe/MBTI-Match/blob/main/lib/assets/screenshots/7.jpg" width="200" height="400"/>
+  <img src="https://github.com/MortuusestChe/MBTI-Match/blob/main/lib/assets/screenshots/7.jpg" width="200" height="400"/>
+</div>
 

@@ -136,7 +136,7 @@ class _SurveyState extends State<Survey> {
       id: TaskIdentifier(),
       steps: [
         InstructionStep(
-          title: 'Welcome to the\nMBTI\n Personal Test',
+          title: 'Welcome to the\nMBTI\n Personality Test',
           text:
               'Get ready for a bunch of confusing questions! It could take few minutes',
           buttonText: 'Let\'s go!',

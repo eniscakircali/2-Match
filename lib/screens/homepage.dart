@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:mbti_match/screens/requests.dart';
 import 'package:mbti_match/screens/matchup.dart';
 import 'package:get/get.dart';
+import 'package:mbti_match/screens/signin.dart';
 import 'package:mbti_match/services/functions.dart';
 
 class HomePage extends StatefulWidget {
@@ -52,6 +53,7 @@ class _HomePage extends State<HomePage> {
     ("ISTP's have a compelling drive to understand the way things work. They're good at logical analysis, and like to use it on practical concerns. They typically have strong powers of reasoning, although they're not interested in theories or concepts unless they can see a practical application. They like to take things apart and see the way they work."),
   ];
   int _selectedIndex = 0;
+  bool flag = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -77,14 +79,60 @@ class _HomePage extends State<HomePage> {
     });
   }
 
+  void gettype() async {
+    // function call for geting usertype by name
+    await Functions().getType(name).then((name) {
+      if (name.data['success']) {
+        setState(() {
+          type = name.data['msg'].toString();
+          findType();
+        });
+      }
+    });
+  }
+
+  void findType() async {
+    // function for find user type for show details.
+    for (var i = 0; i < 16; i++) {
+      if (type == types[i]) {
+        setState(() {
+          userType = typesDetails[i];
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    gettype();
+    if (flag == false) {
+      gettype();
+      setState(() {
+        flag = true;
+      });
+    }
+
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
           body: SingleChildScrollView(
-            child: profile(),
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  const SizedBox(height: 30),
+                  ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          primary: Colors.purple[200],
+                          minimumSize: const Size(15, 30)),
+                      onPressed: () {
+                        Get.to(() => const Signin());
+                      },
+                      child: const Icon(
+                        Icons.exit_to_app,
+                        size: 20,
+                      )),
+                  profile()
+                ]),
           ),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.white,
@@ -117,7 +165,7 @@ class _HomePage extends State<HomePage> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         const SizedBox(
-          height: 80,
+          height: 20,
         ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -127,6 +175,7 @@ class _HomePage extends State<HomePage> {
             Column(children: [
               Builder(builder: (context) {
                 return const CircleAvatar(
+                  backgroundImage: AssetImage("lib/assets/1.jpg"),
                   radius: 60,
                 );
               }),
@@ -214,28 +263,5 @@ class _HomePage extends State<HomePage> {
         ),
       ],
     );
-  }
-
-  void gettype() async {
-    // function call for geting usertype by name
-    await Functions().getType(name).then((name) {
-      if (name.data['success']) {
-        setState(() {
-          type = name.data['msg'].toString();
-          findType();
-        });
-      }
-    });
-  }
-
-  void findType() async {
-    // function for find user type for show details.
-    for (var i = 0; i < 16; i++) {
-      if (type == types[i]) {
-        setState(() {
-          userType = typesDetails[i];
-        });
-      }
-    }
   }
 }

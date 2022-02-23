@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 //users attributes:
-//id, name, password, nickname, type, requests, matches,
+//id, name, password, nickname, type, requests and matches.
 
 class Functions {
   Dio dio = Dio();
   // takes two parameters and connecting to our server. Function checking database with these two parameters and returning message.
   login(name, password) async {
     try {
-      return await dio.post('http://localhost:3000/authenticator',
+      return await dio.post('https://mbtitype.herokuapp.com/authenticator',
           data: {"name": name, "password": password},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {
@@ -28,7 +28,7 @@ class Functions {
 // takes three parameters and connecting to our server. Function adding new users to our database with checking users that already registered.
   addUser(name, password, nickname) async {
     try {
-      return await dio.post("http://localhost:3000/adduser",
+      return await dio.post("https://mbtitype.herokuapp.com/adduser",
           data: {"name": name, "password": password, "nickname": nickname},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {
@@ -46,7 +46,7 @@ class Functions {
 // this function checking for user has a type or not.
   flagCheck(name) async {
     try {
-      return await dio.post("http://localhost:3000/flagcheck",
+      return await dio.post("https://mbtitype.herokuapp.com/flagcheck",
           data: {"name": name},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -55,7 +55,7 @@ class Functions {
 // this function updating user type by survey result.
   updateType(name, type) async {
     try {
-      return await dio.post("http://localhost:3000/updatetype",
+      return await dio.post("https://mbtitype.herokuapp.com/updatetype",
           data: {"name": name, "type": type},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -64,7 +64,7 @@ class Functions {
 // this function returning user type.
   getType(name) async {
     try {
-      return await dio.post("http://localhost:3000/getType",
+      return await dio.post("https://mbtitype.herokuapp.com/getType",
           data: {"name": name},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -73,7 +73,7 @@ class Functions {
 // this function geting all users by given type.
   findMatch(type) async {
     try {
-      return await dio.post("http://localhost:3000/findMatch",
+      return await dio.post("https://mbtitype.herokuapp.com/findMatch",
           data: {"type": type},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -82,7 +82,7 @@ class Functions {
 // this function sending a request to user from another user. Name variable geting request and value variable is the sender.
   sendRequest(name, value) async {
     try {
-      return await dio.post("http://localhost:3000/sendRequest",
+      return await dio.post("https://mbtitype.herokuapp.com/sendRequest",
           data: {"name": name, "value": value},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -91,7 +91,7 @@ class Functions {
 // this function geting users requests and matches.
   getRequests(name) async {
     try {
-      return await dio.post("http://localhost:3000/getRequests",
+      return await dio.post("https://mbtitype.herokuapp.com/getRequests",
           data: {"name": name},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -100,7 +100,7 @@ class Functions {
 // once this function called it's deleting value from requests and adding to matches.
   acceptRequest(name, value) async {
     try {
-      return await dio.post("http://localhost:3000/acceptRequest",
+      return await dio.post("https://mbtitype.herokuapp.com/acceptRequest",
           data: {"name": name, "value": value},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -109,7 +109,7 @@ class Functions {
 // once this function called it's deleting value from requests.
   declineRequest(name, value) async {
     try {
-      return await dio.post("http://localhost:3000/declineRequest",
+      return await dio.post("https://mbtitype.herokuapp.com/declineRequest",
           data: {"name": name, "value": value},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -118,7 +118,7 @@ class Functions {
 // this function returning users name and type.
   returnUser(name) async {
     try {
-      return await dio.post("http://localhost:3000/returnUser",
+      return await dio.post("https://mbtitype.herokuapp.com/returnUser",
           data: {"name": name},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}
@@ -127,7 +127,8 @@ class Functions {
 // this function returning users name, type and nickname.
   returnUserWithNickname(name) async {
     try {
-      return await dio.post("http://localhost:3000/returnUserWithNickname",
+      return await dio.post(
+          "https://mbtitype.herokuapp.com/returnUserWithNickname",
           data: {"name": name},
           options: Options(contentType: Headers.formUrlEncodedContentType));
     } on DioError catch (e) {}

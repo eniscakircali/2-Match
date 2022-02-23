@@ -1,3 +1,5 @@
+// ignore_for_file: prefer_typing_uninitialized_variables
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,10 +13,10 @@ class Matches extends StatefulWidget {
   const Matches({Key? key}) : super(key: key);
 
   @override
-  _matches createState() => _matches();
+  _Matches createState() => _Matches();
 }
 
-class _matches extends State<Matches> {
+class _Matches extends State<Matches> {
   var name = Get.arguments[0];
   var types = Get.arguments[1];
   var typesDetails = Get.arguments[2];
@@ -23,7 +25,7 @@ class _matches extends State<Matches> {
   var matchesDocument;
   int tempCounter =
       0; // this variable avoiding listbuilder() from getting error when requestdocument.length method returning null
-
+  bool flag = false;
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -44,6 +46,22 @@ class _matches extends State<Matches> {
             transition: Transition.rightToLeft,
             duration: const Duration(seconds: 1),
             arguments: [name, types, typesDetails, type]);
+      }
+    });
+  }
+
+  getMatches() async {
+    // this method connecting to our server and geting our data from database
+    await Functions().getRequests(name).then((name) {
+      if (name.data['success']) {
+        setState(() {
+          matchesDocument = name.data['msg']['matches'];
+          if (matchesDocument != null) {
+            matchesDocument = matchesDocument.split(',');
+            tempCounter = matchesDocument.length -
+                1; // we subtracting because our matches variable taking first element as a value called undefined
+          }
+        });
       }
     });
   }
@@ -120,7 +138,12 @@ class _matches extends State<Matches> {
   }
 
   listBuilder() {
-    getMatches(); // method call for geting our data from server
+    if (flag == false) {
+      getMatches();
+      setState(() {
+        flag = true;
+      });
+    } // method call for geting our data from server
     return ListView.builder(
         itemCount: tempCounter,
         itemBuilder: (BuildContext context, int index) {
@@ -170,8 +193,8 @@ class _matches extends State<Matches> {
                                 ],
                               ),
                               Row(
-                                children: const [
-                                  Text("Here is my username"),
+                                children: [
+                                  Text(matchesDocument[index + 1]),
                                 ],
                               )
                             ],
@@ -197,19 +220,5 @@ class _matches extends State<Matches> {
                 ),
               ));
         });
-  }
-
-  getMatches() async {
-    // this method connecting to our server and geting our data from database
-    await Functions().getRequests(name).then((name) {
-      if (name.data['success']) {
-        setState(() {
-          matchesDocument = name.data['msg']['matches'];
-          matchesDocument = matchesDocument.split(',');
-          tempCounter = matchesDocument.length -
-              1; // we subtracting because our matches variable taking first element as a value called undefined
-        });
-      }
-    });
   }
 }

@@ -1,5 +1,6 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mbti_match/screens/homepage.dart';
 import 'package:mbti_match/screens/survey.dart';
@@ -19,6 +20,9 @@ class _SigninState extends State<Signin> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
     return Scaffold(
         resizeToAvoidBottomInset: false,
         body: Padding(

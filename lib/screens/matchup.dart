@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
+
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mbti_match/screens/homepage.dart';
 import 'package:mbti_match/screens/requests.dart';
 import 'package:mbti_match/services/functions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MatchUp extends StatefulWidget {
   const MatchUp({Key? key}) : super(key: key);
@@ -13,6 +16,8 @@ class MatchUp extends StatefulWidget {
 }
 
 class _Matchup extends State<MatchUp> {
+  final Future<SharedPreferences> _prefs = SharedPreferences.getInstance();
+  late Future<int> _counter;
   int _selectedIndex = 1;
   var name = Get.arguments[0];
   var types = Get.arguments[1];
@@ -49,6 +54,73 @@ class _Matchup extends State<MatchUp> {
             arguments: [name, types, typesDetails, type]);
       }
     });
+  }
+
+  Future<void> cardIndexCounter() async {
+    // this function helping user to get last match index with using shared preferences
+    final SharedPreferences prefs = await _prefs;
+    final int counter = (prefs.getInt('counter') ?? 0) + 1;
+    setState(() {
+      _counter = prefs.setInt('counter', counter).then((bool success) {
+        return counter;
+      });
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _counter = _prefs.then((SharedPreferences prefs) {
+      return prefs.getInt('counter') ?? 0;
+    });
+  }
+
+  void getMatches() async {
+    // this function connecting server and gettin our data. Data contains id, name, type ...
+    await Functions().findMatch(type).then((type) {
+      if (type.data['success']) {
+        setState(() {
+          userMatchesDocument = type.data['msg'];
+        });
+      }
+    });
+    await editMatches();
+  }
+
+  editMatches() async {
+    // this function editing our raw data to useful data.
+    if (userMatchesDocument[indexofMatch]["name"] != name) {
+      setState(() {
+        // this condition asks for is user who logged in and matched user are the same user.
+        userMatchName = (userMatchesDocument[indexofMatch]["name"]);
+        userMatchType = (userMatchesDocument[indexofMatch]["type"]);
+        paramName = userMatchName;
+        paramValue = name;
+      });
+      findTypeDetails(); // we need to get type info
+    } else if (indexofMatch == userMatchesDocument.length - 1) {
+      // this condition asking for the index of user is the last index in matches. If it is, seting indexofmatches to zero.
+      setState(() {
+        indexofMatch == 0;
+      });
+      editMatches();
+    } else {
+      setState(() {
+        indexofMatch++;
+      });
+      editMatches();
+    }
+  }
+
+  findTypeDetails() async {
+    // this function getting type info by matched user type
+    for (var i = 0; i < 16; i++) {
+      if (userMatchType == types[i]) {
+        setState(() {
+          matchedUserTypeDetails = typesDetails[i];
+        });
+      }
+    }
   }
 
   @override
@@ -92,7 +164,13 @@ class _Matchup extends State<MatchUp> {
   }
 
   cardBuilder() {
-    getMatches(); // firstly we need to connect with our server to get our data.
+    if (flag == false) {
+      getMatches();
+      setState(() {
+        flag == true;
+      });
+    }
+    // firstly we need to connect with our server to get our data.
     return SizedBox(
       height: 550,
       child: ListView.builder(
@@ -197,6 +275,7 @@ class _Matchup extends State<MatchUp> {
                                 indexofMatch = 0;
                               });
                             }
+                            cardIndexCounter();
                             editMatches();
                           },
                           child: const Icon(
@@ -220,6 +299,7 @@ class _Matchup extends State<MatchUp> {
                                 indexofMatch = 0;
                               });
                             }
+                            cardIndexCounter();
                             editMatches();
                           },
                           child: const Icon(
@@ -236,53 +316,5 @@ class _Matchup extends State<MatchUp> {
             );
           }),
     );
-  }
-
-  void getMatches() async {
-    // this function connecting server and gettin our data. Data contains id, name, type ...
-    await Functions().findMatch(type).then((type) {
-      if (type.data['success']) {
-        setState(() {
-          userMatchesDocument = type.data['msg'];
-        });
-      }
-    });
-    if (flag == false) {
-      // this condition asks for is editmatches function is already called or not.
-      await editMatches();
-    }
-  }
-
-  editMatches() async {
-    // this function editing our raw data to useful data.
-    setState(() {
-      flag = true;
-    });
-    if (userMatchesDocument[indexofMatch]["name"] != name) {
-      setState(() {
-        // this condition asks for is user who logged in and matched user are the same user.
-        userMatchName = (userMatchesDocument[indexofMatch]["name"]);
-        userMatchType = (userMatchesDocument[indexofMatch]["type"]);
-        paramName = userMatchName;
-        paramValue = name;
-      });
-      findTypeDetails(); // we need to get type info
-    } else {
-      setState(() {
-        indexofMatch++;
-      });
-      editMatches();
-    }
-  }
-
-  findTypeDetails() async {
-    // this function getting type info by matched user type
-    for (var i = 0; i < 16; i++) {
-      if (userMatchType == types[i]) {
-        setState(() {
-          matchedUserTypeDetails = typesDetails[i];
-        });
-      }
-    }
   }
 }

@@ -3,4 +3,5 @@ import 'package:mbti_match/screens/signin.dart';
 import 'package:get/get.dart';
 
 void main() => runApp(const GetMaterialApp(
+    debugShowCheckedModeBanner: false,
     home: Signin())); // main function running our app with get.

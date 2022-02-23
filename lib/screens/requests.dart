@@ -23,6 +23,7 @@ class _Requests extends State<Requests> {
   int tempCounter =
       0; // this variable avoiding listbuilder() from getting error when requestdocument.length method returning null
   var requestDocument;
+  bool flag = false;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -44,6 +45,18 @@ class _Requests extends State<Requests> {
             transition: Transition.rightToLeft,
             duration: const Duration(seconds: 1),
             arguments: [name, types, typesDetails, type]);
+      }
+    });
+  }
+
+  getRequests() async {
+    // this method connecting to our server and geting our data from database
+    await Functions().getRequests(name).then((name) {
+      if (name.data['success']) {
+        setState(() {
+          requestDocument = name.data['msg']['requests'];
+          tempCounter = requestDocument.length;
+        });
       }
     });
   }
@@ -121,7 +134,12 @@ class _Requests extends State<Requests> {
 
   listBuilder() {
     // this method creating card for every request
-    getRequests(); // firstly we should get our data by calling server
+    if (flag == false) {
+      getRequests();
+      setState(() {
+        flag == true;
+      });
+    } // firstly we should get our data by calling server
     return ListView.builder(
         itemCount: tempCounter,
         itemBuilder: (BuildContext context, int index) {
@@ -229,17 +247,5 @@ class _Requests extends State<Requests> {
                 ),
               ));
         });
-  }
-
-  getRequests() async {
-    // this method connecting to our server and geting our data from database
-    await Functions().getRequests(name).then((name) {
-      if (name.data['success']) {
-        setState(() {
-          requestDocument = name.data['msg']['requests'];
-          tempCounter = requestDocument.length;
-        });
-      }
-    });
   }
 }

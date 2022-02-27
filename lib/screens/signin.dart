@@ -25,33 +25,35 @@ class _SigninState extends State<Signin> {
     ]);
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        body: Padding(
-          padding: const EdgeInsets.all(50),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              TextField(
-                // TextField for users name
-                decoration: const InputDecoration(labelText: 'Name'),
-                onChanged: (val) {
-                  name = val;
-                },
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextField(
-                // TextField for users password
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                onChanged: (val) {
-                  password = val;
-                },
-              ),
-              const SizedBox(height: 20),
-              buttons(),
-            ],
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(50),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                TextField(
+                  // TextField for users name
+                  decoration: const InputDecoration(labelText: 'Name'),
+                  onChanged: (val) {
+                    name = val;
+                  },
+                ),
+                const SizedBox(
+                  height: 10,
+                ),
+                TextField(
+                  // TextField for users password
+                  decoration: const InputDecoration(labelText: 'Password'),
+                  obscureText: true,
+                  onChanged: (val) {
+                    password = val;
+                  },
+                ),
+                const SizedBox(height: 20),
+                buttons(),
+              ],
+            ),
           ),
         ));
   }

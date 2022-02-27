@@ -50,7 +50,7 @@ class _Matches extends State<Matches> {
     });
   }
 
-  getMatches() async {
+  Future<void> getMatches() async {
     // this method connecting to our server and geting our data from database
     await Functions().getRequests(name).then((name) {
       if (name.data['success']) {

@@ -22,33 +22,35 @@ class _SignupState extends State<Signup> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Padding(
-        padding: const EdgeInsets.all(30),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Form(
-                // form for validation
-                key: _formKey,
-                child: Column(
-                  children: [
-                    nameForm(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    nicknameForm(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    passwordForm(),
-                    const SizedBox(
-                      height: 15,
-                    ),
-                    acceptButton()
-                  ],
-                ))
-          ],
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(30),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Form(
+                  // form for validation
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      nameForm(),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      nicknameForm(),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      passwordForm(),
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      acceptButton()
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );

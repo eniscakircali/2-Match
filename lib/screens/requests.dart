@@ -49,7 +49,7 @@ class _Requests extends State<Requests> {
     });
   }
 
-  getRequests() async {
+  Future<void> getRequests() async {
     // this method connecting to our server and geting our data from database
     await Functions().getRequests(name).then((name) {
       if (name.data['success']) {

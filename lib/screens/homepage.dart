@@ -79,7 +79,7 @@ class _HomePage extends State<HomePage> {
     });
   }
 
-  void gettype() async {
+  Future<void> gettype() async {
     // function call for geting usertype by name
     await Functions().getType(name).then((name) {
       if (name.data['success']) {
@@ -114,25 +114,27 @@ class _HomePage extends State<HomePage> {
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
-          body: SingleChildScrollView(
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const SizedBox(height: 30),
-                  ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          primary: Colors.purple[200],
-                          minimumSize: const Size(15, 30)),
-                      onPressed: () {
-                        Get.to(() => const Signin());
-                      },
-                      child: const Icon(
-                        Icons.exit_to_app,
-                        size: 20,
-                      )),
-                  profile()
-                ]),
+          body: SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const SizedBox(height: 30),
+                    ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            primary: Colors.purple[200],
+                            minimumSize: const Size(15, 30)),
+                        onPressed: () {
+                          Get.to(() => const Signin());
+                        },
+                        child: const Icon(
+                          Icons.exit_to_app,
+                          size: 20,
+                        )),
+                    profile()
+                  ]),
+            ),
           ),
           bottomNavigationBar: BottomNavigationBar(
             backgroundColor: Colors.white,

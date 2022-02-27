@@ -59,9 +59,10 @@ class _Matchup extends State<MatchUp> {
   Future<void> cardIndexCounter() async {
     // this function helping user to get last match index with using shared preferences
     final SharedPreferences prefs = await _prefs;
-    final int counter = (prefs.getInt('counter') ?? 0) + 1;
+    int counter = (prefs.getInt('counter') ?? 0) + 1;
     setState(() {
       _counter = prefs.setInt('counter', counter).then((bool success) {
+        print(counter);
         return counter;
       });
     });
@@ -75,7 +76,7 @@ class _Matchup extends State<MatchUp> {
     });
   }
 
-  void getMatches() async {
+  Future<void> getMatches() async {
     // this function connecting server and gettin our data. Data contains id, name, type ...
     await Functions().findMatch(type).then((type) {
       if (type.data['success']) {
@@ -87,7 +88,7 @@ class _Matchup extends State<MatchUp> {
     await editMatches();
   }
 
-  editMatches() async {
+  Future<void> editMatches() async {
     // this function editing our raw data to useful data.
     if (userMatchesDocument[indexofMatch]["name"] != name) {
       setState(() {
@@ -98,17 +99,18 @@ class _Matchup extends State<MatchUp> {
         paramValue = name;
       });
       findTypeDetails(); // we need to get type info
-    } else if (indexofMatch == userMatchesDocument.length - 1) {
-      // this condition asking for the index of user is the last index in matches. If it is, seting indexofmatches to zero.
-      setState(() {
-        indexofMatch == 0;
-      });
-      editMatches();
     } else {
       setState(() {
         indexofMatch++;
       });
-      editMatches();
+      if (indexofMatch >= userMatchesDocument.length) {
+        setState(() {
+          indexofMatch = 0;
+        });
+        editMatches();
+      } else {
+        editMatches();
+      }
     }
   }
 
@@ -128,13 +130,10 @@ class _Matchup extends State<MatchUp> {
     return WillPopScope(
       onWillPop: () => Future.value(false),
       child: Scaffold(
-          body: SingleChildScrollView(
+          body: SafeArea(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const SizedBox(
-                  height: 80,
-                ),
                 cardBuilder() // cardbuilder calling itself by itemcount variable
               ],
             ),
@@ -225,7 +224,7 @@ class _Matchup extends State<MatchUp> {
                       ],
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
                     Text(
                       userMatchType,
@@ -235,7 +234,7 @@ class _Matchup extends State<MatchUp> {
                           fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 5,
                     ),
                     Text(
                       matchedUserTypeDetails,
@@ -244,7 +243,7 @@ class _Matchup extends State<MatchUp> {
                       style: const TextStyle(fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,

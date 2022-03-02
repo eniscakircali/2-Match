@@ -60,6 +60,7 @@ class _Matchup extends State<MatchUp> {
     // this function helping user to get last match index with using shared preferences
     final SharedPreferences prefs = await _prefs;
     int counter = (prefs.getInt('counter') ?? 0) + 1;
+    counter = indexofMatch;
     setState(() {
       _counter = prefs.setInt('counter', counter).then((bool success) {
         print(counter);
@@ -72,6 +73,7 @@ class _Matchup extends State<MatchUp> {
   void initState() {
     super.initState();
     _counter = _prefs.then((SharedPreferences prefs) {
+      indexofMatch = prefs.getInt('counter') ?? 0;
       return prefs.getInt('counter') ?? 0;
     });
   }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mbti_match/screens/homepage.dart';
+import 'package:mbti_match/screens/loading.dart';
 import 'package:mbti_match/services/functions.dart';
 import 'package:survey_kit/survey_kit.dart';
 import 'package:get/get.dart';
@@ -379,7 +380,7 @@ class _SurveyState extends State<Survey> {
             case "A":
               evaluate();
               setState(() {
-                Get.to(() => const HomePage(),
+                Get.to(() => const Loading(),
                     transition: Transition.rightToLeft,
                     duration: const Duration(seconds: 1),
                     arguments: name);
@@ -388,7 +389,7 @@ class _SurveyState extends State<Survey> {
             case "B":
               evaluate();
               setState(() {
-                Get.to(() => const HomePage(),
+                Get.to(() => const Loading(),
                     transition: Transition.rightToLeft,
                     duration: const Duration(seconds: 1),
                     arguments: name);
@@ -396,7 +397,7 @@ class _SurveyState extends State<Survey> {
               break;
             default:
               evaluate();
-              Get.to(() => const HomePage(),
+              Get.to(() => const Loading(),
                   transition: Transition.rightToLeft,
                   duration: const Duration(seconds: 1),
                   arguments: name);
@@ -484,7 +485,7 @@ class _SurveyState extends State<Survey> {
     await Functions().updateType(name, type).then((name) {
       //function call for updating user type.
       if (name.data['success']) {
-        Get.to(() => const HomePage(),
+        Get.to(() => const Loading(),
             transition: Transition.rightToLeft,
             duration: const Duration(seconds: 1),
             arguments: name);

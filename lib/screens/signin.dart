@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:mbti_match/screens/homepage.dart';
+import 'package:mbti_match/screens/loading.dart';
 import 'package:mbti_match/screens/survey.dart';
 import 'package:mbti_match/screens/signup.dart';
 import 'package:mbti_match/services/functions.dart';
@@ -86,7 +87,7 @@ class _SigninState extends State<Signin> {
                   // function call for checking user has a type or not
                   if (val.data['success']) {
                     // if user has a type go directly our homepage
-                    Get.to(() => const HomePage(),
+                    Get.to(() => const Loading(),
                         arguments: name,
                         duration: const Duration(seconds: 1),
                         transition: Transition.rightToLeft);

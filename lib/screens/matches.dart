@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:mbti_match/screens/homepage.dart';
 import 'package:mbti_match/screens/requests.dart';
 import 'package:mbti_match/screens/matchup.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../services/functions.dart';
 
@@ -26,6 +27,7 @@ class _Matches extends State<Matches> {
   int tempCounter =
       0; // this variable avoiding listbuilder() from getting error when requestdocument.length method returning null
   bool flag = false;
+  var nickname = "User Not Found";
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -64,6 +66,32 @@ class _Matches extends State<Matches> {
         });
       }
     });
+  }
+
+  Future getUserNickname(index) async {
+    await Functions()
+        .returnUserWithNickname(matchesDocument[index + 1])
+        .then((name) {
+      if (name.data['success']) {
+        setState(() {
+          nickname = name.data['msg']['nickname'];
+        });
+      }
+      return redirectInstagram();
+    });
+  }
+
+  redirectInstagram() async {
+    var url = 'https://www.instagram.com/' + nickname + '/';
+
+    if (await canLaunch(url)) {
+      await launch(
+        url,
+        universalLinksOnly: true,
+      );
+    } else {
+      throw 'There was a problem to open the url: $url';
+    }
   }
 
   @override
@@ -192,11 +220,12 @@ class _Matches extends State<Matches> {
                                   )
                                 ],
                               ),
-                              Row(
-                                children: [
-                                  Text(matchesDocument[index + 1]),
-                                ],
-                              )
+                              const Text(
+                                "Here is my username!",
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic),
+                              ),
                             ],
                           ),
                           const SizedBox(
@@ -206,7 +235,9 @@ class _Matches extends State<Matches> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  getUserNickname(index);
+                                },
                                 child: const Text("Get Username"),
                                 style: ElevatedButton.styleFrom(
                                     primary: Colors.purple[300], elevation: 5),

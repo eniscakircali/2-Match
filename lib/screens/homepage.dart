@@ -4,6 +4,7 @@ import 'package:mbti_match/screens/matchup.dart';
 import 'package:get/get.dart';
 import 'package:mbti_match/screens/signin.dart';
 import 'package:mbti_match/services/functions.dart';
+import 'package:avatars/avatars.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -15,6 +16,8 @@ class HomePage extends StatefulWidget {
 class _HomePage extends State<HomePage> {
   var name = Get.arguments;
   var type = "";
+  var nickname =
+      "instagram"; // take one random ig nickname for avoid the iteration error.
   var userType = "";
   var types = [
     'ENFJ',
@@ -81,12 +84,14 @@ class _HomePage extends State<HomePage> {
 
   Future<void> gettype() async {
     // function call for geting usertype by name
-    await Functions().getType(name).then((name) {
+    await Functions().returnUserWithNickname(name).then((name) {
       if (name.data['success']) {
         setState(() {
-          type = name.data['msg'].toString();
-          findType();
+          type = name.data['msg']['type'];
+          nickname = name.data['msg']['nickname'];
+          print(nickname);
         });
+        findType();
       }
     });
   }
@@ -166,21 +171,18 @@ class _HomePage extends State<HomePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        const SizedBox(
-          height: 20,
-        ),
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(width: 50),
-            Column(children: [
-              Builder(builder: (context) {
-                return const CircleAvatar(
-                  backgroundImage: AssetImage("lib/assets/1.jpg"),
-                  radius: 60,
-                );
-              }),
+            Column(children: <Widget>[
+              Avatar(
+                sources: [
+                  InstagramSource(
+                      nickname), // Fallback if GitHubSource is not available
+                ], // Fallback if no image source is available
+              ),
             ]),
             const SizedBox(
               width: 30,

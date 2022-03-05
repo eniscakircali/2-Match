@@ -63,7 +63,6 @@ class _Matchup extends State<MatchUp> {
     counter = indexofMatch;
     setState(() {
       _counter = prefs.setInt('counter', counter).then((bool success) {
-        print(counter);
         return counter;
       });
     });

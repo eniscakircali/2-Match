@@ -184,11 +184,7 @@ class _Requests extends State<Requests> {
                                   Text(requestDocument[index]),
                                 ],
                               ),
-                              Row(
-                                children: const [
-                                  Text("Wants your username"),
-                                ],
-                              )
+                              const Text("Wants your username"),
                             ],
                           ),
                           const SizedBox(

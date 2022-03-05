@@ -59,3 +59,13 @@ The official BottomAppBar can only display a notch FAB with app bar, sometimes w
 
 This is an asset repo containing the default set of icon assets used by Flutter's Cupertino widgets.
 [link](https://pub.dev/packages/cupertino_icons)
+
+### Url Launcher
+
+A Flutter plugin for launching a URL. Supports iOS, Android, web, Windows, macOS, and Linux.
+[link](https://pub.dev/packages/url_launcher)
+
+### Avatars
+
+A complete avatar widget with a priority & fallback system which allows you to specify multiple image sources like socials (Facebook, Instagram, GitHub, Gravatar) and custom providers (assets and network) or to use text (name initials or custom values).
+[link](https://pub.dev/packages/avatars)
